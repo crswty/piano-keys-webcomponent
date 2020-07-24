@@ -45,7 +45,7 @@ describe("Piano Component", () => {
         });
 
         it("can render keys starting from C", () => {
-            const component = render(`<piano-keys keyboard-layout="CtoB" key-count=13/>`);
+            const component = render(`<piano-keys keyboard-layout="C" key-count=13/>`);
 
             const keys = Array.from(component.getElementsByClassName("note"))
                 .sort(byHorizontalPosition)
@@ -64,7 +64,7 @@ describe("Piano Component", () => {
                 .map(displayName);
 
             expect(keys[0]).toEqual("A-0");
-            component.setAttribute("keyboard-layout", "CtoB");
+            component.setAttribute("keyboard-layout", "C");
 
             const updatedKeys = Array.from(component.getElementsByClassName("note"))
                 .map(displayName);

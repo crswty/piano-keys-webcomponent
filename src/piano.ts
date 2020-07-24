@@ -1,4 +1,4 @@
-import {Layouts, Note, noteGenerator} from "./note-generator";
+import {Note, noteGenerator} from "./note-generator";
 
 const KeyWidth = 10;
 const SharpWidth = 6;
@@ -56,7 +56,7 @@ class Piano extends HTMLElement implements PianoElement {
     readAttributes(): PianoAttributes {
         return {
             keycount: parseInt(this.getAttribute("key-count") || "88"),
-            layout: this.getAttribute("keyboard-layout") || "AtoG",
+            layout: this.getAttribute("keyboard-layout") || "A",
             readOnly: this.hasAttribute("read-only"),
         };
     }
@@ -121,7 +121,7 @@ class Piano extends HTMLElement implements PianoElement {
     getNoteSvg() {
         const noteCount = this.config.keycount;
 
-        const generator = noteGenerator(Layouts[this.config.layout]);
+        const generator = noteGenerator(this.config.layout);
         const notes = new Array(noteCount).fill(1).map(() => generator.next().value);
 
         const whiteKeys = notes
@@ -158,11 +158,11 @@ class Piano extends HTMLElement implements PianoElement {
             } as NotePosition;
         });
 
-        const normalKeys = offsets.filter(({note}: NotePosition) => !note.includes("#"))
-            .map(({note, octave, offset}: NotePosition) => normalKey(note, octave, offset));
+        const normalKeys = offsets.filter((pos: NotePosition) => !pos.note.includes("#"))
+            .map((pos: NotePosition) => normalKey(pos.note, pos.octave, pos.offset));
 
-        const sharpKeys = offsets.filter(({note}: NotePosition) => note.includes("#"))
-            .map(({note, octave, offset}: NotePosition) => sharpKey(note, octave, offset));
+        const sharpKeys = offsets.filter((pos: NotePosition) => pos.note.includes("#"))
+            .map((pos: NotePosition) => sharpKey(pos.note, pos.octave, pos.offset));
 
         return `<g>
             ${normalKeys}
