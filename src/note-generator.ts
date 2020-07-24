@@ -30,7 +30,7 @@ export const Layouts: any = {
     ]
 };
 
-interface Note {
+export interface Note {
     name: string;
     octave: number;
 }

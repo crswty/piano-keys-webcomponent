@@ -1,14 +1,8 @@
 import "@testing-library/jest-dom";
 import './piano';
 import {Piano} from "@/piano";
-import {fireEvent, waitFor} from "@testing-library/dom";
+import {fireEvent} from "@testing-library/dom";
 
-function render(content: string): Element {
-    const testContainer = document.createElement("div");
-    document.body.appendChild(testContainer);
-    testContainer.innerHTML = content;
-    return testContainer.children.item(0)!;
-}
 
 describe("Piano Component", () => {
 
@@ -187,3 +181,11 @@ const byHorizontalPosition = (a: Element, b: Element) => {
 
 const displayName = (value: Element) => value.getAttribute("data-note") + "-" + value.getAttribute("data-octave");
 const keySelector = (note: string, octave: number) => `[data-note="${note}"][data-octave="${octave}"]`;
+
+
+function render(content: string): Element {
+    const testContainer = document.createElement("div");
+    document.body.appendChild(testContainer);
+    testContainer.innerHTML = content;
+    return testContainer.children.item(0)!;
+}
