@@ -36,7 +36,6 @@ const SharpWidth = 6;
 function sharpKey(note: string, octave: string, offset: number) {
     return `<rect
             class="sharp-note note"
-            id="note-${note}-${octave}"
             data-note="${note}"
             data-octave="${octave}"
             x=${offset}
@@ -50,7 +49,6 @@ function sharpKey(note: string, octave: string, offset: number) {
 function normalKey(note: string, octave: string, offset: number) {
     return `<rect
             class="natural-note note"
-            id="note-${note}-${octave}"
             data-note="${note}"
             data-octave="${octave}"
             x=${offset}
@@ -126,7 +124,7 @@ export class Piano extends HTMLElement implements PianoElement {
         });
 
         this.config = this.readAttributes();
-        this.innerHTML = `<div data-testid="title"></div><style>${this.getCss()}</style><div>${this.getNoteSvg()}</div>`;
+        this.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}</div>`;
     }
 
     attributeChangedCallback() {
@@ -156,15 +154,16 @@ export class Piano extends HTMLElement implements PianoElement {
         }
     }
 
+
     setNoteDown(note: string, octave: number) {
-        const elem = this.querySelector(`#note-${note.replace("#", "\\#")}-${octave}`)!;
+        const elem = this.querySelector(keySelector(note, octave))!;
         const color = note.includes("#") ? "grey" : "grey";
         elem.setAttribute("fill", color);
         elem.setAttribute("transform", "scale(1 0.95)");
     }
 
     setNoteUp(note: string, octave: number) {
-        const elem = this.querySelector(`#note-${note.replace("#", "\\#")}-${octave}`)!;
+        const elem = this.querySelector(keySelector(note, octave))!;
         const color = note.includes("#") ? "#555555" : "white";
         elem.setAttribute("fill", color);
         elem.setAttribute("transform", "scale(1 1)");
@@ -216,7 +215,7 @@ export class Piano extends HTMLElement implements PianoElement {
         const sharpKeys = offsets.filter(({note}: NotePosition) => note.includes("#"))
             .map(({note, octave, offset}: NotePosition) => sharpKey(note, octave, offset));
 
-        return `<g id="keys"">
+        return `<g>
             ${normalKeys}
             ${sharpKeys}
         </g>`
@@ -228,5 +227,6 @@ export class Piano extends HTMLElement implements PianoElement {
     }
 }
 
+const keySelector = (note: string, octave: number) => `[data-note="${note}"][data-octave="${octave}"]`;
 
 customElements.define("piano-keys", Piano);

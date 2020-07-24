@@ -41,12 +41,12 @@ describe("Piano Component", () => {
 
             const keys = Array.from(component.getElementsByClassName("note"))
                 .sort(byHorizontalPosition)
-                .map(value => value.getAttribute("id"));
+                .map(displayName);
 
             expect(keys).toEqual([
-                'note-A-0', 'note-A#-0', 'note-B-0', 'note-C-1', 'note-C#-1',
-                'note-D-1', 'note-D#-1', 'note-E-1', 'note-F-1', 'note-F#-1',
-                'note-G-1', 'note-G#-1', 'note-A-1'
+                'A-0', 'A#-0', 'B-0', 'C-1', 'C#-1',
+                'D-1', 'D#-1', 'E-1', 'F-1', 'F#-1',
+                'G-1', 'G#-1', 'A-1'
             ]);
         });
 
@@ -55,24 +55,26 @@ describe("Piano Component", () => {
 
             const keys = Array.from(component.getElementsByClassName("note"))
                 .sort(byHorizontalPosition)
-                .map(value => value.getAttribute("id"));
+                .map(displayName);
 
             expect(keys).toEqual([
-                "note-C-0", "note-C#-0", "note-D-0", "note-D#-0", "note-E-0",
-                "note-F-0", "note-F#-0", "note-G-0", "note-G#-0", "note-A-0",
-                "note-A#-0", "note-B-0", "note-C-1"
+                "C-0", "C#-0", "D-0", "D#-0", "E-0",
+                "F-0", "F#-0", "G-0", "G#-0", "A-0",
+                "A#-0", "B-0", "C-1"
             ]);
         });
 
         it("responds to layout change", () => {
             const component = render(`<piano-keys key-count=1/>`);
-            const keys = Array.from(component.getElementsByClassName("note"));
+            const keys = Array.from(component.getElementsByClassName("note"))
+                .map(displayName);
 
-            expect(keys[0].getAttribute("id")).toEqual("note-A-0");
+            expect(keys[0]).toEqual("A-0");
             component.setAttribute("keyboard-layout", "CtoB");
 
-            const updatedKeys = Array.from(component.getElementsByClassName("note"));
-            expect(updatedKeys[0].getAttribute("id")).toEqual("note-C-0");
+            const updatedKeys = Array.from(component.getElementsByClassName("note"))
+                .map(displayName);
+            expect(updatedKeys[0]).toEqual("C-0");
         });
 
     });
@@ -183,4 +185,5 @@ const byHorizontalPosition = (a: Element, b: Element) => {
     return aPos - bPos
 };
 
+const displayName = (value: Element) => value.getAttribute("data-note") + "-" + value.getAttribute("data-octave");
 const keySelector = (note: string, octave: number) => `[data-note="${note}"][data-octave="${octave}"]`;
