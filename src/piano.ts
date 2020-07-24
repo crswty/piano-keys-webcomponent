@@ -38,11 +38,11 @@ export interface PianoElement extends HTMLElement {
 
 interface PianoAttributes {
     keycount: number;
-    layout: string;
+    layout: string
     readOnly: boolean;
 }
 
-export class Piano extends HTMLElement implements PianoElement {
+class Piano extends HTMLElement implements PianoElement {
     private config!: PianoAttributes;
 
     static get observedAttributes() {

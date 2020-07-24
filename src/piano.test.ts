@@ -1,7 +1,7 @@
+import {fireEvent} from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import './piano';
-import {Piano} from "@/piano";
-import {fireEvent} from "@testing-library/dom";
+import {PianoElement} from "./piano";
 
 
 describe("Piano Component", () => {
@@ -76,7 +76,7 @@ describe("Piano Component", () => {
     describe("key press", () => {
 
         it("can press keys down and up", () => {
-            const component = render(`<piano-keys key-count=3/>`) as Piano;
+            const component = render(`<piano-keys key-count=3/>`) as PianoElement;
 
             const A0 = component.querySelector(keySelector("A", 0))!;
             const ASharp0 = component.querySelector(keySelector("A#", 0))!;
@@ -101,7 +101,7 @@ describe("Piano Component", () => {
     describe("key interactivity", () => {
 
         it("triggers note-down and note-up event on mousedown/up", (done) => {
-            const component = render(`<piano-keys/>`) as Piano;
+            const component = render(`<piano-keys/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
             expect(A0.getAttribute("fill")).toEqual("white");
@@ -119,7 +119,7 @@ describe("Piano Component", () => {
         });
 
         it("marks keys as depressed when mouse down", () => {
-            const component = render(`<piano-keys/>`) as Piano;
+            const component = render(`<piano-keys/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
             expect(A0.getAttribute("fill")).toEqual("white");
@@ -131,7 +131,7 @@ describe("Piano Component", () => {
         });
 
         it("read-only disables interactivity", () => {
-            const component = render(`<piano-keys read-only="true"/>`) as Piano;
+            const component = render(`<piano-keys read-only="true"/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
             expect(A0.getAttribute("fill")).toEqual("white");
@@ -141,7 +141,7 @@ describe("Piano Component", () => {
         });
 
         it("read-only disables callback", (done) => {
-            const component = render(`<piano-keys read-only="true"/>`) as Piano;
+            const component = render(`<piano-keys read-only="true"/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
             component.addEventListener("note-down", () => {
@@ -154,7 +154,7 @@ describe("Piano Component", () => {
         });
 
         it("read-only can be updated", () => {
-            const component = render(`<piano-keys/>`) as Piano;
+            const component = render(`<piano-keys/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
             expect(A0.getAttribute("fill")).toEqual("white");
