@@ -149,24 +149,37 @@ class Piano extends HTMLElement implements PianoElement {
 
     getCss() {
         return `
+        
+        :host {
+            --natural-key-color: #FFFFFF; 
+            --natural-key-outline-color: #555555;
+            
+            --sharp-key-color: #555555;
+            --sharp-key-outline-color: #555555;
+            
+            --depressed-key-color: #808080;
+            --depressed-key-transform: scale(1, 0.95);
+        }
+        
         :host {
           display: block;
         }
         .natural-note {
-          stroke: #555555;
-          fill: white;
+          stroke: var(--natural-key-outline-color);
+          fill: var(--natural-key-color);
           width: ${NaturalWidth};
           height: 50;
         }
         .sharp-note {
-          stroke: #555555;
-          fill: #555555;
+          stroke: var(--sharp-key-outline-color);
+          fill: var(--sharp-key-color);
           width: ${SharpWidth};
           height: 30;
         }
+        
         .depressed {
-          fill: grey;
-          transform: scale(1, 0.95);
+          fill: var(--depressed-key-color);
+          transform: var(--depressed-key-transform);
         }
         `
     }
