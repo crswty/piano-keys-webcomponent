@@ -118,6 +118,39 @@ describe("Piano Component", () => {
             fireEvent.mouseDown(A0);
         });
 
+        describe('note up on mouse out', function () {
+
+            it("triggers note-up when state is down and mouse leaves", (done) => {
+                const [component, shadowRoot] = render(`<piano-keys/>`);
+                const A0 = shadowRoot.querySelector(keySelector("A", 0))!;
+
+                component.addEventListener("note-down", ((event: CustomEvent) => {
+                    expect(event.detail).toEqual({note: "A", octave: 0});
+                    component.addEventListener("note-up", () => {
+                        expect(event.detail).toEqual({note: "A", octave: 0});
+                        done();
+                    });
+                    fireEvent.mouseOut(A0);
+                }) as EventListener);
+
+                fireEvent.mouseDown(A0);
+            });
+
+            it("doesnt trigger note up when note is not down", (done) => {
+                const [component, shadowRoot] = render(`<piano-keys/>`);
+                const A0 = shadowRoot.querySelector(keySelector("A", 0))!;
+
+                component.addEventListener("note-up", () => {
+                    fail("note-up should not have been fired");
+                });
+
+                fireEvent.mouseOut(A0);
+                //Not great essentially have to wait for something to not happen but this timeout works (for now)
+                setTimeout(done, 100);
+            });
+        });
+
+
         it("marks keys as depressed when mouse down", () => {
             const [component, shadowRoot] = render(`<piano-keys/>`);
             const A0 = shadowRoot.querySelector(keySelector("A", 0))!;

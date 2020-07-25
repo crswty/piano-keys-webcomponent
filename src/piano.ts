@@ -52,6 +52,12 @@ class Piano extends HTMLElement implements PianoElement {
             this.handleClick(event, false);
             event.preventDefault();
         });
+
+        this.root.addEventListener('mouseout', (event) => {
+            this.handleClick(event, false);
+            event.preventDefault();
+        });
+
         this.root.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}`;
     }
 
@@ -73,11 +79,13 @@ class Piano extends HTMLElement implements PianoElement {
             const octave = parseInt(event.target.getAttribute("data-octave"));
 
             if (down) {
-                this.dispatchEvent(new CustomEvent('note-down', {detail: {note, octave}}));
                 this.setNoteDown(note, octave);
+                this.dispatchEvent(new CustomEvent('note-down', {detail: {note, octave}}));
             } else {
-                this.dispatchEvent(new CustomEvent('note-up', {detail: {note, octave}}));
-                this.setNoteUp(note, octave);
+                if (target.hasAttribute("data-depressed")) {
+                    this.setNoteUp(note, octave);
+                    this.dispatchEvent(new CustomEvent('note-up', {detail: {note, octave}}));
+                }
             }
         }
     }
@@ -85,11 +93,13 @@ class Piano extends HTMLElement implements PianoElement {
     setNoteDown(note: string, octave: number) {
         const elem = this.root.querySelector(keySelector(note, octave))!;
         elem.classList.add("depressed");
+        elem.setAttribute("data-depressed", "data-depressed");
     }
 
     setNoteUp(note: string, octave: number) {
         const elem = this.root.querySelector(keySelector(note, octave))!;
         elem.classList.remove("depressed");
+        elem.removeAttribute("data-depressed");
     }
 
     getNoteSvg() {
@@ -103,7 +113,7 @@ class Piano extends HTMLElement implements PianoElement {
             .length;
         const lastKeySharp = notes[notes.length - 1].name.includes("#");
 
-        const totalWidth = (naturalKeys * NaturalWidth) + (lastKeySharp ? SharpWidth/2 : 0) + 2;
+        const totalWidth = (naturalKeys * NaturalWidth) + (lastKeySharp ? SharpWidth / 2 : 0) + 2;
         return `<svg viewBox="0 0 ${totalWidth} 52" version="1.1" xmlns="http://www.w3.org/2000/svg">
             ${this.getKeysForNotes(notes)}
         </svg>`;
