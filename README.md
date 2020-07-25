@@ -10,7 +10,14 @@ The component creates content using Shadow DOM so there should be no namespacing
 You can also customize the look and feel using CSS variables.
 
 ## Examples
-[Examples](https://crswty.github.io/piano-keys-webcomponent/) with code samples 
+Refer to the full [Examples](https://crswty.github.io/piano-keys-webcomponent/) & code samples to 
+see the full range of what's possible.
+
+To set up, all you need to do is import the module, you can then use the `piano-keys` tag
+```html
+<script src="https://unpkg.com/piano-keys-webcomponent-v0@1.0.2/dist/index.umd.min.js"></script>  
+<piano-keys layout="A" keys=88></piano-keys>
+```
 
 ## Configuration Options
 
@@ -42,8 +49,15 @@ setNoteUp(note: string, octave: number)
 
 ## Styling
 
+Styling can be overridden with CSS variables, to use any of the below values, simply
+prefix them with `--` an apply them to the component like so:
+```css
+piano-keys {
+    --natural-key-color: blue
+}
+```  
 
-| Attribute                  | Description
+| Variable                   | Description
 | -------------------------- | -----------
 | natural-key-color          | Fill color of the natural keys
 | natural-key-outline-color  | Border color of the natural keys
