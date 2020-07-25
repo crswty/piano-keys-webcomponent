@@ -105,14 +105,15 @@ describe("Piano Component", () => {
             const [component, shadowRoot] = render(`<piano-keys/>`);
             const A0 = shadowRoot.querySelector(keySelector("A", 0))!;
 
-            component.addEventListener("note-down", () => {
-
+            component.addEventListener("note-down", ((event: CustomEvent) => {
+                expect(event.detail).toEqual({note: "A", octave: 0});
                 component.addEventListener("note-up", () => {
+                    expect(event.detail).toEqual({note: "A", octave: 0});
                     done();
                 });
 
                 fireEvent.mouseUp(A0);
-            });
+            }) as EventListener);
 
             fireEvent.mouseDown(A0);
         });

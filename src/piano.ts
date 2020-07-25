@@ -18,6 +18,7 @@ export interface PianoElement extends HTMLElement {
     setNoteUp(note: string, octave: number): void;
 }
 
+
 interface PianoAttributes {
     keyCount: number;
     keyboardLayout: string
@@ -69,7 +70,7 @@ class Piano extends HTMLElement implements PianoElement {
         const target = event.target;
         if (target.tagName === "rect") {
             const note = event.target.getAttribute("data-note");
-            const octave = event.target.getAttribute("data-octave");
+            const octave = parseInt(event.target.getAttribute("data-octave"));
 
             if (down) {
                 this.dispatchEvent(new CustomEvent('note-down', {detail: {note, octave}}));
