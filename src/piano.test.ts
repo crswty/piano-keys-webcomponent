@@ -81,20 +81,20 @@ describe("Piano Component", () => {
             const A0 = component.querySelector(keySelector("A", 0))!;
             const ASharp0 = component.querySelector(keySelector("A#", 0))!;
 
-            expect(A0.getAttribute("fill")).toEqual("white");
-            expect(ASharp0.getAttribute("fill")).toEqual("#555555");
+            expect(A0).not.toHaveClass("depressed");
+            expect(ASharp0).not.toHaveClass("depressed");
 
             component.setNoteDown("A", 0);
             component.setNoteDown("A#", 0);
 
-            expect(A0.getAttribute("fill")).toEqual("grey");
-            expect(ASharp0.getAttribute("fill")).toEqual("grey");
+            expect(A0).toHaveClass("depressed");
+            expect(ASharp0).toHaveClass("depressed");
 
             component.setNoteUp("A", 0);
             component.setNoteUp("A#", 0);
 
-            expect(A0.getAttribute("fill")).toEqual("white");
-            expect(ASharp0.getAttribute("fill")).toEqual("#555555");
+            expect(A0).not.toHaveClass("depressed");
+            expect(ASharp0).not.toHaveClass("depressed");
         });
     });
 
@@ -103,8 +103,6 @@ describe("Piano Component", () => {
         it("triggers note-down and note-up event on mousedown/up", (done) => {
             const component = render(`<piano-keys/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
-
-            expect(A0.getAttribute("fill")).toEqual("white");
 
             component.addEventListener("note-down", () => {
 
@@ -122,22 +120,23 @@ describe("Piano Component", () => {
             const component = render(`<piano-keys/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
 
             fireEvent.mouseDown(A0);
-            expect(A0.getAttribute("fill")).toEqual("grey");
+            expect(A0).toHaveClass("depressed");
+
             fireEvent.mouseUp(A0);
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
         });
 
         it("read-only disables interactivity", () => {
             const component = render(`<piano-keys read-only="true"/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
 
             fireEvent.mouseDown(A0);
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
         });
 
         it("read-only disables callback", (done) => {
@@ -157,16 +156,16 @@ describe("Piano Component", () => {
             const component = render(`<piano-keys/>`) as PianoElement;
             const A0 = component.querySelector(keySelector("A", 0))!;
 
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
 
             fireEvent.mouseDown(A0);
-            expect(A0.getAttribute("fill")).toEqual("grey");
+            expect(A0).toHaveClass("depressed");
             fireEvent.mouseUp(A0);
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
 
             component.setAttribute("read-only", "true");
             fireEvent.mouseDown(A0);
-            expect(A0.getAttribute("fill")).toEqual("white");
+            expect(A0).not.toHaveClass("depressed");
         });
 
     });
