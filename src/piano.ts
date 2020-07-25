@@ -26,6 +26,7 @@ interface PianoAttributes {
 
 class Piano extends HTMLElement implements PianoElement {
     private config!: PianoAttributes;
+    private root: ShadowRoot;
 
     static get observedAttributes() {
         return ["key-count", "keyboard-layout", "read-only"]
@@ -39,24 +40,29 @@ class Piano extends HTMLElement implements PianoElement {
         };
     }
 
+    constructor() {
+        super();
+        this.root = this.attachShadow({mode: "open"});
+    }
+
     connectedCallback() {
 
-        this.addEventListener('mousedown', (event) => {
+        this.root.addEventListener('mousedown', (event) => {
             this.handleClick(event, true);
             event.preventDefault();
         });
-        this.addEventListener('mouseup', (event) => {
+        this.root.addEventListener('mouseup', (event) => {
             this.handleClick(event, false);
             event.preventDefault();
         });
 
         this.config = this.readAttributes();
-        this.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}</div>`;
+        this.root.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}`;
     }
 
     attributeChangedCallback() {
         this.config = this.readAttributes();
-        this.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}</div>`;
+        this.root.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}</div>`;
     }
 
     handleClick(event: any, down: boolean) {
@@ -81,12 +87,12 @@ class Piano extends HTMLElement implements PianoElement {
     }
 
     setNoteDown(note: string, octave: number) {
-        const elem = this.querySelector(keySelector(note, octave))!;
+        const elem = this.root.querySelector(keySelector(note, octave))!;
         elem.classList.add("depressed");
     }
 
     setNoteUp(note: string, octave: number) {
-        const elem = this.querySelector(keySelector(note, octave))!;
+        const elem = this.root.querySelector(keySelector(note, octave))!;
         elem.classList.remove("depressed");
     }
 
@@ -143,6 +149,9 @@ class Piano extends HTMLElement implements PianoElement {
 
     getCss() {
         return `
+        :host {
+          display: block;
+        }
         .natural-note {
           stroke: #555555;
           fill: white;

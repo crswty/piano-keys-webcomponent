@@ -5,7 +5,15 @@
 </head>
 <body>
 <div>
-    <piano-keys style="width: 50%" id="piano" key-count=88/>
+
+    <piano-keys style="width: 85%" id="piano" key-count=88 />
+
+    <script>
+        const piano = document.getElementById("piano");
+        piano.addEventListener("note-down", (event) => console.log("note-down", event.detail));
+        piano.addEventListener("note-up", (event) => console.log("note-up", event.detail));
+    </script>
+
 </div>
 </body>
 </html>
