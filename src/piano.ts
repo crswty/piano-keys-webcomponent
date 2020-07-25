@@ -25,14 +25,13 @@ interface PianoAttributes {
 }
 
 class Piano extends HTMLElement implements PianoElement {
-    private config!: PianoAttributes;
     private root: ShadowRoot;
 
     static get observedAttributes() {
         return ["key-count", "keyboard-layout", "read-only"]
     }
 
-    readAttributes(): PianoAttributes {
+    get config(): PianoAttributes {
         return {
             keyCount: parseInt(this.getAttribute("key-count") || "88"),
             keyboardLayout: this.getAttribute("keyboard-layout") || "A",
@@ -43,31 +42,27 @@ class Piano extends HTMLElement implements PianoElement {
     constructor() {
         super();
         this.root = this.attachShadow({mode: "open"});
-    }
-
-    connectedCallback() {
-
         this.root.addEventListener('mousedown', (event) => {
             this.handleClick(event, true);
             event.preventDefault();
         });
+
         this.root.addEventListener('mouseup', (event) => {
             this.handleClick(event, false);
             event.preventDefault();
         });
-
-        this.config = this.readAttributes();
         this.root.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}`;
     }
 
+    connectedCallback() {
+    }
+
     attributeChangedCallback() {
-        this.config = this.readAttributes();
         this.root.innerHTML = `<style>${this.getCss()}</style><div>${this.getNoteSvg()}</div>`;
     }
 
     handleClick(event: any, down: boolean) {
-        const readOnly = this.config.readOnly;
-        if (readOnly) {
+        if (this.config.readOnly) {
             return;
         }
 
@@ -105,8 +100,9 @@ class Piano extends HTMLElement implements PianoElement {
         const naturalKeys = notes
             .filter((note) => !note.name.includes("#"))
             .length;
-        //TODO only add padding for sharp if last key is actually sharp
-        const totalWidth = (naturalKeys * NaturalWidth) + (SharpWidth);
+        const lastKeySharp = notes[notes.length - 1].name.includes("#");
+
+        const totalWidth = (naturalKeys * NaturalWidth) + (lastKeySharp ? SharpWidth/2 : 0) + 2;
         return `<svg viewBox="0 0 ${totalWidth} 52" version="1.1" xmlns="http://www.w3.org/2000/svg">
             ${this.getKeysForNotes(notes)}
         </svg>`;
@@ -164,17 +160,19 @@ class Piano extends HTMLElement implements PianoElement {
         :host {
           display: block;
         }
+        
         .natural-note {
           stroke: var(--natural-key-outline-color);
           fill: var(--natural-key-color);
-          width: ${NaturalWidth};
-          height: 50;
+          width: ${NaturalWidth}px;
+          height: 50px;
         }
+        
         .sharp-note {
           stroke: var(--sharp-key-outline-color);
           fill: var(--sharp-key-color);
-          width: ${SharpWidth};
-          height: 30;
+          width: ${SharpWidth}px;
+          height: 30px;
         }
         
         .depressed {
