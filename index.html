@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/piano-keys-webcomponent@1.0.0/dist/index.umd.min.js"></script>
+</head>
+<body>
+<div>
+
+<!--
+Features:
+    - Any layout
+    - Any number of keys
+    - Respond to user input
+    - Programmable
+    - Stylable
+    -
+-->
+    <div style="width: 85%">
+        <piano-keys id="default-piano"></piano-keys>
+
+        <script>
+            const piano = document.getElementById("default-piano");
+            piano.addEventListener("note-down", (event) => console.log("note-down", event.detail));
+            piano.addEventListener("note-up", (event) => console.log("note-up", event.detail));
+        </script>
+    </div>
+
+
+    <style>
+        piano-keys.custom-style {
+            width: 85%;
+            --natural-key-color: #368059;
+            --natural-key-outline-color: #0d800b;
+
+            --sharp-key-color: #50ADFF;
+            --sharp-key-outline-color: #151CFF;
+
+            --depressed-key-color: orange;
+            --depressed-key-transform: scale(1, 0.98);
+        }
+    </style>
+
+    <piano-keys class="custom-style" key-count=36 keyboard-layout="C"></piano-keys>
+
+    <piano-keys id="programmable-piano" read-only="true" key-count=36 keyboard-layout="C"></piano-keys>
+    <script>
+        const programmablePiano = document.getElementById("programmable-piano");
+
+        const chords = [["C", "E", "G"], ["B", "D#", "G"], ["A", "D", "G#"]];
+        let previousChord = [];
+        let currentChord = 0;
+
+        function playChord() {
+
+            previousChord.forEach((key) => {
+                programmablePiano.setNoteUp(key, 1);
+            });
+
+            chords[currentChord].forEach((key) => {
+                programmablePiano.setNoteDown(key, 1);
+            });
+
+            previousChord = chords[currentChord];
+            currentChord = currentChord + 1;
+            if (currentChord >= chords.length) currentChord = 0;
+        }
+
+        playChord();
+        setInterval(playChord, 2500);
+    </script>
+</div>
+</body>
+</html>
