@@ -4,7 +4,8 @@ const KeyWidth = 10;
 const SharpWidth = 6;
 
 function sharpKey(note: string, octave: number, offset: number) {
-    return `<rect
+    return `
+<rect
             class="sharp-note note"
             data-note="${note}"
             data-octave="${octave}"
