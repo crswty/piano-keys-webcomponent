@@ -1,6 +1,6 @@
 # Piano Keys Webcomponent
 
-![image of piano keys](images/full-layout.png)
+![image of piano keys](images/preview.png)
 
 ## Overview
 Piano Keys is a webcomponent that renders a piano keyboard layout. It supports any number of keys and any layout. 
